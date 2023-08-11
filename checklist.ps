@@ -1,0 +1,200 @@
+%!PS-Adobe-3.0 EPSF-3.0
+%%DocumentMedia: PlainLetter 612 792 75 white ( )
+%%BoundingBox: 0 0 20 10
+%%BeginProlog
+% define and assign the scale
+% note: 1 cm = 28.34645 points,
+% 1 inch = 72 points.
+/s 28.34645 def
+/BodyH 5 def
+/BodyW 5 def
+/Margin 1.5 def
+/w 0.7 def
+/h 0.9 def
+/VisibleTelomereLen w 2 mul def
+/TelomereLen VisibleTelomereLen Margin add def
+/DistBetweenCuts 0.25 def
+/DistBetweenLines 0.5 h mul def
+/CutsOffset 7 def
+/NCuts 4 def
+/MaxNum 9 def
+%%EndProlog
+s s scale
+1 s div setlinewidth
+
+/Items
+	[
+		(Flowers)
+		(Boil water)
+		(Sippy cups)
+		(Thermos)
+		(Dishes)
+		(Garbage)
+	] def
+	
+/NItems Items length def
+
+% https://stackoverflow.com/a/7425416
+/ceshow { % (string) fontsize fontname x y
+    gsave
+        moveto findfont exch scalefont setfont % s
+        gsave
+            dup false charpath flattenpath pathbbox % s x0 y0 x1 y1
+        grestore
+        3 -1 roll sub % s x0 x1 dy
+        3 1 roll sub % s dy -dx
+        2 div exch % s -dx/2 dy
+        -2 div % s -dx/2 -dy/2
+        rmoveto show
+    grestore
+} bind def
+
+
+/FramedDigit { % number -
+  newpath 0 0 w h rectstroke % draw frame.
+  2 string  cvs % number in a string.
+  1  /Helvetica  w 2 div    h 2 div  ceshow 
+} def
+
+/Telomere {
+	newpath 0 0 TelomereLen h rectstroke % draw frame.
+} def
+
+/Ribbon { % number -
+gsave
+Telomere
+TelomereLen 0 translate
+0 FramedDigit
+w 0 translate
+1 FramedDigit
+w 0 translate
+Telomere
+grestore
+} def
+
+/Body { % number -
+  newpath 0 0 BodyW BodyH rectstroke % draw frame.
+} def
+
+/PlaceNumbersRibbon { % x y -
+gsave
+translate
+MaxNum NumbersRibbon
+grestore
+} def
+
+/PlaceRibbons { % x y -
+gsave
+translate
+NItems {
+Ribbon
+0 h translate
+} repeat
+grestore
+} def
+
+/PlaceEdges { % x y -
+gsave
+translate
+Edges
+grestore
+} def
+
+/2Cuts {
+newpath
+0 0 moveto
+w 0 lineto
+0 h moveto
+w h lineto
+stroke
+} def
+
+/AllCuts {
+	gsave
+	1 1 NRibbons {
+	1 ne
+		{
+		    DistBetweenCuts 0 translate
+		}
+		{
+			 0 pop
+		} ifelse
+		2Cuts
+		w 0 translate
+     } for
+grestore
+} def
+
+/EdgesW {
+2 Margin mul
+%NCuts 1 sub w mul
+NCuts w mul
+%add
+add
+CutsOffset add
+} def
+
+/EdgesH {
+2 Margin mul
+DistBetweenLines NItems 1 sub mul add
+h NItems mul add
+} def
+
+
+/VertLines { % numlines
+	newpath
+	
+	1 1  3 -1 roll {
+		/ind exch def
+		ind 1 sub w mul % line x.
+		dup
+        0 % x x 0
+		moveto % x
+	    h % x h
+		lineto
+	} for
+	stroke
+} def
+
+/4Cuts { % -
+4 VertLines
+} def
+
+/ListItems {
+
+/Times-Roman findfont
+h scalefont
+setfont
+gsave
+Items
+{
+newpath
+0 0 moveto
+show
+gsave
+CutsOffset 0 translate
+4Cuts
+grestore
+0 h DistBetweenLines add translate
+} forall
+grestore
+} def
+
+%/FramedList {
+%} def
+
+/Edges {
+newpath 0 0 EdgesW EdgesH rectstroke
+gsave
+Margin Margin translate
+ListItems
+grestore
+} def
+
+% Edges
+1 13 PlaceEdges
+1 EdgesW add     
+13 PlaceRibbons
+
+showpage
+%%EOF

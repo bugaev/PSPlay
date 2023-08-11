@@ -1,0 +1,20 @@
+%%DocumentMedia: PlainLetter 612 792 75 white ( )
+%%BeginProlog
+% define and assign the scale
+% note: 1 cm = 28.34645 points,
+% 1 inch = 72 points.
+/s 28.34645 def
+/w 15 def
+/h 10 def
+%%EndProlog
+s s scale
+1 s div setlinewidth
+1 1 translate
+newpath
+0 0 moveto
+0 h lineto
+w h lineto
+w 0 lineto
+closepath
+stroke
+showpage
